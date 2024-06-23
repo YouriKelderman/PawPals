@@ -1,16 +1,18 @@
 {
-  "language": "German",
+  "language": "Sprache: Deutsch",
   "home": {
     "suggestedParks": "Empfohlene Parks",
     "favoriteParks": "Lieblingsparks",
     "picturePrompt": "Foto machen",
+    "sharePicture": "Foto tielen",
     "deletePicture": "Foto löschen",
     "viewOnMap": "Klicken Sie hier, um auf der Karte anzuzeigen",
     "noNetwork": "Keine verbindung"
   },
   "settings": {
     "theme": "Thema wechseln",
-    "language": "Sprache wechseln"
+    "language": "Sprache wechseln",
+    "save": "speichern"
   },
   "global": {
     "tags": {

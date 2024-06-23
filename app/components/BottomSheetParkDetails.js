@@ -1,12 +1,13 @@
-import React, {useCallback, useContext, useEffect, useRef, useState, forwardRef} from "react";
-import {ThemeContext} from "./ThemeContext";
-import {Text, View, TouchableOpacity, Image, Alert} from "react-native";
+import {useEffect, useState, forwardRef, useCallback, useContext} from "react";
+import {Text, View, TouchableOpacity, Image, StyleSheet} from "react-native";
 import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet";
+import {ThemeContext} from '../components/ThemeContext';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
 import {useTranslation} from "react-i18next";
 import NetInfo from "@react-native-community/netinfo";
+import * as Sharing from 'expo-sharing';
 
 const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref) => {
     const {t} = useTranslation();
@@ -102,7 +103,7 @@ const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref
             alert("Camera permissions are required to take a picture.");
         }
     };
-
+//save image to asynstorage
     const saveImage = async (uri) => {
         if (!uri) {
             console.error("Attempted to save a null or undefined URI");
@@ -114,7 +115,7 @@ const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref
             console.error("Error saving image", error);
         }
     };
-
+//load image from the asyncstorage based on the given ID
     const loadImage = async (id) => {
         try {
             const uri = await AsyncStorage.getItem(`${id}_photo`);
@@ -127,7 +128,7 @@ const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref
             console.error("Error loading image", error);
         }
     };
-
+//delete picture from both the localstorage and the useState
     const deletePicture = async () => {
         setPhotoUri(null);
         console.log('deleted');
@@ -135,6 +136,22 @@ const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref
             await AsyncStorage.setItem(`${parkData.id}_photo`, '');
         } catch (error) {
             console.error("Error saving image", error);
+        }
+    };
+    const shareImage = async () => {
+        try {
+            if (photoUri) {
+                const message = "Check out this photo!";
+                await Sharing.shareAsync(photoUri, {
+                    dialogTitle: "Share your image with the world!",
+                    mimeType: 'image/jpeg',
+                    UTI: 'public.jpeg'
+                });
+            } else {
+                console.log("No photo to share");
+            }
+        } catch (error) {
+            console.error("Error sharing image", error);
         }
     };
 
@@ -147,43 +164,76 @@ const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref
             <BottomSheetView style={{
                 flex: 1,
                 alignItems: 'center',
+                textAlign: 'center',
                 padding: 16,
                 backgroundColor: theme.colors.div,
             }}>
                 {parkData && (
                     <View>
                         <Text style={{
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            color: theme.colors.textColor
+                            fontSize: 30,
+                            fontWeight: '800',
+                            color: theme.colors.ligherText
                         }}>{parkData.name}</Text>
                         {isConnected !== null && (
                             isConnected ? (
-                                <TouchableOpacity onPress={() => goToPlace(parkData.longitude, parkData.latitude)}>
+                                <TouchableOpacity onPress={() => goToPlace(parkData.longitude, parkData.latitude)}
+                                                  style={styles.button}>
                                     <Text
-                                        style={{color: theme.colors.textColor, margin: 10}}>{t('home.viewOnMap')}</Text>
+                                        style={{
+                                            color: 'white',
+                                            padding: 4,
+                                            backgroundColor: 'green',
+                                            borderRadius: 4,
+                                            margin: 0
+                                        }}>{t('home.viewOnMap')}</Text>
                                 </TouchableOpacity>
                             ) : (
                                 <Text>{t('home.noNetwork')}</Text>
                             )
                         )}
-                        <TouchableOpacity onPress={promptPicture}>
-                            <Text style={{color: theme.colors.textColor, margin: 10}}>{t('home.picturePrompt')}</Text>
+                        <TouchableOpacity onPress={promptPicture} style={styles.button}>
+                            <Text style={{color: 'white',
+                                padding: 4,
+                                backgroundColor: 'blue',
+                                borderRadius: 4,
+                                margin: 0}}>{t('home.picturePrompt')}</Text>
                         </TouchableOpacity>
                         {photoUri && (
                             <Image source={{uri: photoUri}} style={{width: 200, height: 200, marginTop: 10}}/>
                         )}
+                        <View style={{flex: 1, flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
                         {photoUri && (
-                            <TouchableOpacity onPress={deletePicture}>
+                            <TouchableOpacity onPress={() => deletePicture(parkData.id)}>
                                 <Text
-                                    style={{color: theme.colors.textColor, margin: 10}}>{t('home.deletePicture')}</Text>
+                                    style={{padding: 4,
+                                        backgroundColor: 'red',
+                                        borderRadius: 4,
+                                        margin: 0, color: 'white'}}>{t('home.deletePicture')}</Text>
                             </TouchableOpacity>
                         )}
+                        {photoUri && isConnected && (
+                            <TouchableOpacity
+                                onPress={shareImage}><Text style={{padding: 4,
+                                backgroundColor: 'blue',
+                                borderRadius: 4,
+                                margin: 0, color: 'white'}}>{t('home.sharePicture')}</Text></TouchableOpacity>
+                        )}
+                        </View>
                     </View>
                 )}
             </BottomSheetView>
         </BottomSheet>
     );
 });
-
+const styles = StyleSheet.create({
+    button: {
+        borderRadius: 4,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    }
+})
 export default BottomSheetParkDetails;
+

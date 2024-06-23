@@ -1,16 +1,18 @@
 {
-  "language": "Dutch",
+  "language": "Taal: Nederlands",
   "home": {
     "suggestedParks": "Aanbevolen parken",
     "favoriteParks": "Favoriete Parken",
     "picturePrompt": "Neem foto",
     "deletePicture": "Verwijder foto",
+    "sharePicture": "Deel foto",
     "viewOnMap": "Weergeven op kaart",
     "noNetwork": "Geen netwerk beschikbaar"
   },
   "settings": {
     "theme": "Wissel van thema",
-    "language": "Wissel taal"
+    "language": "Wissel taal",
+    "save": "opslaan"
   },
   "global": {
     "tags": {
@@ -23,6 +25,6 @@
     },
     "favorites": "favorieten",
     "map": "kaart",
-    "settings": "instellingen"
+    "settings": "instellingen",
   }
 }

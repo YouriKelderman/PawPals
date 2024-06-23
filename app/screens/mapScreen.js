@@ -127,7 +127,7 @@ const MapScreen = ({ route, navigation }) => {
                             latitude: parseFloat(selectedMarker.latitude),
                             longitude: parseFloat(selectedMarker.longitude),
                         }}
-                        apikey="AIzaSyCnrZkJw8-k4KJRMFSk7jdIQ7tUYNqvGYY"
+                        apikey="nope"
                         strokeWidth={4}
                         strokeColor="red"
                         mode="DRIVING" // Set mode to desired travel mode (DRIVING, WALKING, BICYCLING, TRANSIT)

@@ -1,16 +1,18 @@
 {
-  "language": "English",
+  "language": "Language: English",
   "home": {
     "suggestedParks": "Recommended parks",
     "favoriteParks": "Favorite parks",
     "picturePrompt": "Take picture",
     "deletePicture": "Delete picture",
+    "sharePicture": "Share picture",
     "viewOnMap": "Show on map",
     "noNetwork": "No network"
   },
   "settings": {
     "theme": "Switch theme",
-    "language": "Switch language"
+    "language": "Switch language",
+    "save": "save"
   },
   "global": {
     "tags": {
