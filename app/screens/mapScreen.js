@@ -2,264 +2,83 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { View, Text, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import BottomSheet from "@gorhom/bottom-sheet";
-import { ThemeContext } from "../components/ThemeContext";
-import BottomSheetParkList from "../components/BottomSheetParkList";
+import MapViewDirections from 'react-native-maps-directions'; // Import MapViewDirections
+import BottomSheetParkList from '../components/BottomSheetParkList';
+import { ThemeContext } from '../components/ThemeContext';
 
-export default function MapScreen({ route, navigation }) {
-    const darkModeMap = [
-        {
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#212121"
-                }
-            ]
-        },
-        {
-            "elementType": "labels.icon",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#757575"
-                }
-            ]
-        },
-        {
-            "elementType": "labels.text.stroke",
-            "stylers": [
-                {
-                    "color": "#212121"
-                }
-            ]
-        },
-        {
-            "featureType": "administrative",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#757575"
-                }
-            ]
-        },
-        {
-            "featureType": "administrative.country",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#9e9e9e"
-                }
-            ]
-        },
-        {
-            "featureType": "administrative.land_parcel",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "administrative.locality",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#bdbdbd"
-                }
-            ]
-        },
-        {
-            "featureType": "poi",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#757575"
-                }
-            ]
-        },
-        {
-            "featureType": "poi.park",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#181818"
-                }
-            ]
-        },
-        {
-            "featureType": "poi.park",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#616161"
-                }
-            ]
-        },
-        {
-            "featureType": "poi.park",
-            "elementType": "labels.text.stroke",
-            "stylers": [
-                {
-                    "color": "#1b1b1b"
-                }
-            ]
-        },
-        {
-            "featureType": "road",
-            "elementType": "geometry.fill",
-            "stylers": [
-                {
-                    "color": "#2c2c2c"
-                }
-            ]
-        },
-        {
-            "featureType": "road",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#8a8a8a"
-                }
-            ]
-        },
-        {
-            "featureType": "road.arterial",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#373737"
-                }
-            ]
-        },
-        {
-            "featureType": "road.highway",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#3c3c3c"
-                }
-            ]
-        },
-        {
-            "featureType": "road.highway.controlled_access",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#4e4e4e"
-                }
-            ]
-        },
-        {
-            "featureType": "road.local",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#616161"
-                }
-            ]
-        },
-        {
-            "featureType": "transit",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#757575"
-                }
-            ]
-        },
-        {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "color": "#000000"
-                }
-            ]
-        },
-        {
-            "featureType": "water",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "color": "#3d3d3d"
-                }
-            ]
-        }
-    ];
-
+const MapScreen = ({ route, navigation }) => {
+    const darkModeMap = [/* Your dark mode map style */];
     const [location, setLocation] = useState(null);
-    const [heading, setHeading] = useState(0);
     const [parkData, setParkData] = useState([]);
+    const [selectedMarker, setSelectedMarker] = useState(null); // State to track selected marker
     const mapRef = useRef(null);
-    const { theme } = useContext(ThemeContext);
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
-    const bottomSheetRef = useRef(null);
+    // Function to handle marker press and set selected marker
+    const handleMarkerPress = useCallback((park) => {
+        setSelectedMarker(park);
+    }, []);
 
-    const handleSheetChanges = useCallback((index) => {}, []);
-
-    // Change region of map based on given longitude and latitude
-    function changeRegion(item) {
-        const newLatitude = parseFloat(item.latitude);
-        const newLongitude = parseFloat(item.longitude);
-
+    // Function to change region of the map based on given coordinates
+    const changeRegion = useCallback((coords) => {
+        console.log(coords);
         if (mapRef.current) {
             mapRef.current.animateToRegion({
-                latitude: newLatitude,
-                longitude: newLongitude,
+                latitude: parseFloat(coords.latitude),
+                longitude: parseFloat(coords.longitude),
                 latitudeDelta: 0.01,
-                longitudeDelta: 0.01
+                longitudeDelta: 0.01,
             }, 1000);
+            setSelectedMarker(null); // Clear selected marker after setting region
         } else {
             console.error('Map reference is null');
         }
-    }
+    }, []);
+
 
     useEffect(() => {
         (async () => {
-            // Get permissions
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 console.log('Permission to access location was denied');
                 return;
             }
 
-            // Get current location
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
 
-            // Watch for location updates
             Location.watchPositionAsync({ accuracy: Location.Accuracy.High }, (newLocation) => {
                 setLocation(newLocation);
             });
 
-            // Watch for heading updates
-            Location.watchHeadingAsync((newHeading) => {
-                setHeading(newHeading.trueHeading);
-            });
-
-            // Get data from own webservice, date is to prevent cache issues
             try {
                 const response = await fetch(`http://yourikelderman.nl/data.json?timestamp=${new Date().getTime()}`);
                 const data = await response.json();
+
                 setParkData(data);
             } catch (error) {
                 console.error('Error fetching park data:', error);
             }
+
         })();
     }, []);
 
-    // Set nice background while map is loading
-    if (!location) {
+    useEffect(() =>{
+        if(route.params !== undefined) {
+            const {lng, lat} = route.params;
+            if (lng !== undefined) {
+                changeRegion({
+                    longitude: lng,
+                    latitude: lat,
+                })
+            }
+        }
+    }, [route.params])
+
+    if (!location || !location.coords) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Aan het laden....</Text>
+                <Text>Loading...</Text>
             </View>
         );
     }
@@ -283,16 +102,12 @@ export default function MapScreen({ route, navigation }) {
                         longitude: location.coords.longitude,
                     }}
                     title="You are here"
-                    rotation={heading}
-                    anchor={{ x: 0.5, y: 0.5 }}
-                >
-                    <View style={styles.markerContainer}>
-                        <Text style={styles.markerText}>⇧</Text>
-                    </View>
-                </Marker>
+                />
+
                 {parkData.map((park, index) => (
                     <Marker
                         key={index}
+                        onPress={() => handleMarkerPress(park)}
                         coordinate={{
                             latitude: parseFloat(park.latitude),
                             longitude: parseFloat(park.longitude),
@@ -300,25 +115,41 @@ export default function MapScreen({ route, navigation }) {
                         title={park.name}
                     />
                 ))}
+
+                {/* Render MapViewDirections if selectedMarker is set */}
+                {selectedMarker && (
+                    <MapViewDirections
+                        origin={{
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude,
+                        }}
+                        destination={{
+                            latitude: parseFloat(selectedMarker.latitude),
+                            longitude: parseFloat(selectedMarker.longitude),
+                        }}
+                        apikey="temp"
+                        strokeWidth={4}
+                        strokeColor="red"
+                        mode="DRIVING" // Set mode to desired travel mode (DRIVING, WALKING, BICYCLING, TRANSIT)
+                    />
+                )}
             </MapView>
+
+            {/* Render BottomSheetParkList */}
             <BottomSheetParkList
                 parkData={parkData}
-                onChange={(index) => {}}
+                onChange={(index) => changeRegion(parkData[index])}
                 changeRegion={changeRegion}
+                navigation={navigation}
+                setSelectedMarker={setSelectedMarker} // Pass down setSelectedMarker function
             />
         </View>
     );
-}
+};
+
+export default MapScreen;
 
 const styles = StyleSheet.create({
-    markerContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    markerText: {
-        fontSize: 24,
-        color: 'red',
-    },
     container: {
         flex: 1,
         padding: 24,

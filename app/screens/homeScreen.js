@@ -7,6 +7,7 @@ import { FavoriteContext } from "../components/FavoriteContext";
 import { LinearGradient } from "expo-linear-gradient";
 import BottomSheetParkDetails from "../components/BottomSheetParkDetails";
 import {useTranslation} from 'react-i18next';
+import NetInfo from '@react-native-community/netinfo';
 
 export default function HomeScreen({ navigation }) {
     const { t } = useTranslation();
@@ -16,6 +17,8 @@ export default function HomeScreen({ navigation }) {
     const [selectedItem, setSelectedItem] = useState(null);
     const bottomSheetRef = useRef(null);
     let data;
+
+
 
     //get data from API, date is to prevent cache issues
     const getData = async () => {
@@ -44,7 +47,9 @@ export default function HomeScreen({ navigation }) {
 
     useEffect(() => {
         getSuggested();
+
     }, [favoritedItems]);
+
 
     const findItemNameById = (itemId) => {
         const foundItem = customData.find(item => item.id === itemId);
@@ -62,6 +67,7 @@ export default function HomeScreen({ navigation }) {
 
     //send params to map page to zoom in on that part
     function goToPlace(longitude, latitude) {
+        console.log(longitude)
         navigation.navigate('Map', {
             lng: longitude,
             lat: latitude,

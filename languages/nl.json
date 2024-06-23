@@ -5,7 +5,8 @@
     "favoriteParks": "Favoriete Parken",
     "picturePrompt": "Neem foto",
     "deletePicture": "Verwijder foto",
-    "viewOnMap": "Klik hier om op de kaart weer te geven"
+    "viewOnMap": "Weergeven op kaart",
+    "noNetwork": "Geen netwerk beschikbaar"
   },
   "settings": {
     "theme": "Wissel van thema",

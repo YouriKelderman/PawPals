@@ -5,7 +5,8 @@
     "favoriteParks": "Favorite parks",
     "picturePrompt": "Take picture",
     "deletePicture": "Delete picture",
-    "viewOnMap": "Click here to view item on map"
+    "viewOnMap": "Show on map",
+    "noNetwork": "No network"
   },
   "settings": {
     "theme": "Switch theme",

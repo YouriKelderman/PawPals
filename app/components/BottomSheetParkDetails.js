@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
 import {useTranslation} from "react-i18next";
+import NetInfo from "@react-native-community/netinfo";
 
 const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, ref) => {
     const { t } = useTranslation();
@@ -41,13 +42,13 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
         setPhotoUri(null);
     };
 
-    const goToPlace = (longitude, latitude) => {
-        closeBottomSheet();
+    function goToPlace(longitude, latitude) {
+        console.log(longitude)
         navigation.navigate('Map', {
             lng: longitude,
             lat: latitude,
         });
-    };
+    }
 
     const closeBottomSheet = () => {
         if (ref && ref.current) {

@@ -5,7 +5,8 @@
     "favoriteParks": "Lieblingsparks",
     "picturePrompt": "Foto machen",
     "deletePicture": "Foto löschen",
-    "viewOnMap": "Klicken Sie hier, um auf der Karte anzuzeigen"
+    "viewOnMap": "Klicken Sie hier, um auf der Karte anzuzeigen",
+    "noNetwork": "Keine verbindung"
   },
   "settings": {
     "theme": "Thema wechseln",
