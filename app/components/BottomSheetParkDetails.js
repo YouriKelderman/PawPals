@@ -1,18 +1,19 @@
-import React, { useCallback, useContext, useEffect, useRef, useState, forwardRef } from "react";
-import { ThemeContext } from "./ThemeContext";
-import { Text, View, TouchableOpacity, Image, Alert } from "react-native";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import React, {useCallback, useContext, useEffect, useRef, useState, forwardRef} from "react";
+import {ThemeContext} from "./ThemeContext";
+import {Text, View, TouchableOpacity, Image, Alert} from "react-native";
+import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
 import {useTranslation} from "react-i18next";
 import NetInfo from "@react-native-community/netinfo";
 
-const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, ref) => {
-    const { t } = useTranslation();
-    const { theme } = useContext(ThemeContext);
+const BottomSheetParkDetails = forwardRef(({parkData, onChange, navigation}, ref) => {
+    const {t} = useTranslation();
+    const {theme} = useContext(ThemeContext);
     const [photoUri, setPhotoUri] = useState(null);
     const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+    const [isConnected, setIsConnected] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -30,6 +31,16 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
         }
     }, [parkData, ref]);
 
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(state.isConnected);
+            console.log('Network Status changed:', state.isConnected);
+        });
+
+        // Cleanup the listener on component unmount
+        return () => unsubscribe();
+    }, []);
+
     const handleSheetChanges = useCallback((index) => {
         onChange(index);
         if (index === 0) {
@@ -44,6 +55,7 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
 
     function goToPlace(longitude, latitude) {
         console.log(longitude)
+        closeBottomSheet()
         navigation.navigate('Map', {
             lng: longitude,
             lat: latitude,
@@ -72,7 +84,7 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
     };
 
     const launchCamera = async () => {
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        const {status} = await ImagePicker.requestCameraPermissionsAsync();
         if (status === 'granted') {
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -116,8 +128,14 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
         }
     };
 
-    const deletePicture = () => {
+    const deletePicture = async () => {
         setPhotoUri(null);
+        console.log('deleted');
+        try {
+            await AsyncStorage.setItem(`${parkData.id}_photo`, '');
+        } catch (error) {
+            console.error("Error saving image", error);
+        }
     };
 
     return (
@@ -134,19 +152,31 @@ const BottomSheetParkDetails = forwardRef(({ parkData, onChange, navigation }, r
             }}>
                 {parkData && (
                     <View>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.colors.textColor }}>{parkData.name}</Text>
-                        <TouchableOpacity onPress={() => goToPlace(parkData.longitude, parkData.latitude)}>
-                            <Text style={{ color: theme.colors.textColor, margin: 10 }}>Hello</Text>
-                        </TouchableOpacity>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: theme.colors.textColor
+                        }}>{parkData.name}</Text>
+                        {isConnected !== null && (
+                            isConnected ? (
+                                <TouchableOpacity onPress={() => goToPlace(parkData.longitude, parkData.latitude)}>
+                                    <Text
+                                        style={{color: theme.colors.textColor, margin: 10}}>{t('home.viewOnMap')}</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <Text>{t('home.noNetwork')}</Text>
+                            )
+                        )}
                         <TouchableOpacity onPress={promptPicture}>
-                            <Text style={{ color: theme.colors.textColor, margin: 10 }}>{t('home.picturePrompt')}</Text>
+                            <Text style={{color: theme.colors.textColor, margin: 10}}>{t('home.picturePrompt')}</Text>
                         </TouchableOpacity>
                         {photoUri && (
-                            <Image source={{ uri: photoUri }} style={{ width: 200, height: 200, marginTop: 10 }} />
+                            <Image source={{uri: photoUri}} style={{width: 200, height: 200, marginTop: 10}}/>
                         )}
                         {photoUri && (
                             <TouchableOpacity onPress={deletePicture}>
-                                <Text style={{ color: theme.colors.textColor, margin: 10 }}>{t('home.deletePicture')}</Text>
+                                <Text
+                                    style={{color: theme.colors.textColor, margin: 10}}>{t('home.deletePicture')}</Text>
                             </TouchableOpacity>
                         )}
                     </View>

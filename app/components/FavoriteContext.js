@@ -1,5 +1,3 @@
-// FavoriteContext.js
-
 import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -7,6 +5,7 @@ const FavoriteContext = createContext();
 
 const FavoriteProvider = ({children}) => {
     const [favoritedItems, setFavoritedItems] = useState([]);
+
 
     useEffect(() => {
         const loadFavoritedItems = async () => {
@@ -22,10 +21,17 @@ const FavoriteProvider = ({children}) => {
                 console.error('Error loading favorited items:', error);
             }
         };
-
+        const clearFavorites = async () => {
+            try {
+                await AsyncStorage.removeItem('favoritedItems');
+                setFavoritedItems([]);
+            } catch (error) {
+                console.error('Error clearing favorites:', error);
+            }
+        };
+        console.log(favoritedItems)
         loadFavoritedItems();
     }, []);
-
 
     const updateFavorites = async (updatedItems) => {
         try {
@@ -35,13 +41,14 @@ const FavoriteProvider = ({children}) => {
             console.error('Error updating favorites:', error);
         }
     };
-//toggle a favorite based on if it currently is or not.
-    const toggleFavorite = async (itemId) => {
-        if (favoritedItems.includes(itemId)) {
-            const updatedItems = favoritedItems.filter(id => id !== itemId);
+
+    const toggleFavorite = async (item) => {
+        const isFavorited = favoritedItems.some(favItem => favItem.id === item.id);
+        if (isFavorited) {
+            const updatedItems = favoritedItems.filter(favItem => favItem.id !== item.id);
             updateFavorites(updatedItems);
         } else {
-            const updatedItems = [...favoritedItems, itemId];
+            const updatedItems = [...favoritedItems, item];
             updateFavorites(updatedItems);
         }
     };

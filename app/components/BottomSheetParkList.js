@@ -3,7 +3,6 @@ import { ScrollView, View, Text, TouchableOpacity, FlatList, StyleSheet, Image }
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeContext } from "./ThemeContext";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FavoriteContext } from "./FavoriteContext";
 import { useTranslation } from "react-i18next";
 
@@ -23,11 +22,11 @@ const BottomSheetParkList = ({ parkData, onChange, changeRegion, navigation, set
     const { favoritedItems, toggleFavorite } = useContext(FavoriteContext);
 
     const isFavorited = (itemId) => {
-        return favoritedItems.includes(itemId);
+        return favoritedItems.some(item => item.id === itemId);
     };
 
     const handleSheetChanges = useCallback((index) => {
-        
+
     }, [onChange]);
 
     const closeBottomSheet = () => {
@@ -104,7 +103,7 @@ const BottomSheetParkList = ({ parkData, onChange, changeRegion, navigation, set
                                     />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => toggleFavorite(item.id)}
+                            <TouchableOpacity onPress={() => toggleFavorite(item)}
                                               style={{
                                                   flex: 1,
                                                   alignItems: "center",

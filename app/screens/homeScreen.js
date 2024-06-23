@@ -6,7 +6,7 @@ import customData from "../../data.json";
 import { FavoriteContext } from "../components/FavoriteContext";
 import { LinearGradient } from "expo-linear-gradient";
 import BottomSheetParkDetails from "../components/BottomSheetParkDetails";
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import NetInfo from '@react-native-community/netinfo';
 
 export default function HomeScreen({ navigation }) {
@@ -18,9 +18,7 @@ export default function HomeScreen({ navigation }) {
     const bottomSheetRef = useRef(null);
     let data;
 
-
-
-    //get data from API, date is to prevent cache issues
+    // get data from API, date is to prevent cache issues
     const getData = async () => {
         try {
             const response = await fetch(`http://yourikelderman.nl/data.json?timestamp=${new Date().getTime()}`);
@@ -30,26 +28,23 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
-    //get items that the user has not yet favorited but might want to favorite.
+    // get items that the user has not yet favorited but might want to favorite
     const getSuggested = async () => {
         let suggested = [];
         if (data === undefined) {
             await getData();
         }
         for (let item of data) {
-            if (!favoritedItems.includes(item.id)) {
+            if (!favoritedItems.some(favItem => favItem.id === item.id)) {
                 suggested.push(item);
             }
         }
-        console.log("done");
         setSuggested(suggested);
     };
 
     useEffect(() => {
         getSuggested();
-
     }, [favoritedItems]);
-
 
     const findItemNameById = (itemId) => {
         const foundItem = customData.find(item => item.id === itemId);
@@ -65,9 +60,8 @@ export default function HomeScreen({ navigation }) {
         { label: t('global.tags.open'), color: "#0F276D" }
     ];
 
-    //send params to map page to zoom in on that part
+    // send params to map page to zoom in on that part
     function goToPlace(longitude, latitude) {
-        console.log(longitude)
         navigation.navigate('Map', {
             lng: longitude,
             lat: latitude,
@@ -88,33 +82,31 @@ export default function HomeScreen({ navigation }) {
         <View style={{ backgroundColor: theme.colors.backgroundColor, padding: 15 }}>
             <Text style={{ marginTop: 50, fontSize: 30, fontWeight: '800', color: theme.colors.lighterText }}>{t('home.suggestedParks')}</Text>
             <ScrollView horizontal>
-                {suggestedList.map((prop, key) => {
-                    return (
-                        <TouchableOpacity
-                            onPress={() => goToPlace(prop.longitude, prop.latitude)}
-                            key={key} style={styles.suggestedDiv}>
-                            <ImageBackground source={{ uri: prop.url }} style={styles.imageBackground} resizeMode="cover">
-                                <LinearGradient
-                                    colors={['rgba(255,255,255,0)', 'rgba(2,2,2,0.4)', 'rgba(3,3,3,0.62)']}
-                                    style={styles.gradient}>
-                                    <Text style={styles.text}>{prop.name}</Text>
-                                    <View style={styles.tagHolder}>
-                                        {prop.tags.map((tag, index) => (
-                                            <Text key={index} style={{
-                                                fontSize: 12,
-                                                backgroundColor: tagColors[tag[1]].color,
-                                                color: '#fff',
-                                                borderRadius: 5,
-                                                padding: 3,
-                                                margin: 2
-                                            }}>{tagColors[tag[1]].label}</Text>
-                                        ))}
-                                    </View>
-                                </LinearGradient>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    );
-                })}
+                {suggestedList.map((prop, key) => (
+                    <TouchableOpacity
+                        onPress={() => goToPlace(prop.longitude, prop.latitude)}
+                        key={key} style={styles.suggestedDiv}>
+                        <ImageBackground source={{ uri: prop.url }} style={styles.imageBackground} resizeMode="cover">
+                            <LinearGradient
+                                colors={['rgba(255,255,255,0)', 'rgba(2,2,2,0.4)', 'rgba(3,3,3,0.62)']}
+                                style={styles.gradient}>
+                                <Text style={styles.text}>{prop.name}</Text>
+                                <View style={styles.tagHolder}>
+                                    {prop.tags.map((tag, index) => (
+                                        <Text key={index} style={{
+                                            fontSize: 12,
+                                            backgroundColor: tagColors[tag[1]].color,
+                                            color: '#fff',
+                                            borderRadius: 5,
+                                            padding: 3,
+                                            margin: 2
+                                        }}>{tagColors[tag[1]].label}</Text>
+                                    ))}
+                                </View>
+                            </LinearGradient>
+                        </ImageBackground>
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
             <Text style={{
                 color: theme.colors.lighterText,
@@ -124,48 +116,45 @@ export default function HomeScreen({ navigation }) {
                 marginTop: 30
             }}>{t('home.favoriteParks')}</Text>
             <View>
-                {favoritedItems.map((prop, key) => {
-                    const item = findItemNameById(prop);
-                    return (
-                        <TouchableOpacity
-                            onPress={() => handlePressItem(item)}
-                            key={key} style={{
-                            marginBottom: 10,
-                            flexDirection: "row",
-                        }}>
-                            <Image
-                                style={{ width: 80, height: 80, marginRight: 8 }}
-                                source={{ uri: item.url }}
-                                resizeMode="cover"
+                {favoritedItems.map((item, key) => (
+                    <TouchableOpacity
+                        onPress={() => handlePressItem(item)}
+                        key={key} style={{
+                        marginBottom: 10,
+                        flexDirection: "row",
+                    }}>
+                        <Image
+                            style={{ width: 80, height: 80, marginRight: 8 }}
+                            source={{ uri: item.url }}
+                            resizeMode="cover"
+                        />
+                        <View>
+                            <Text style={{
+                                fontSize: 20,
+                                marginBottom: 0,
+                                fontWeight: '900',
+                                color: theme.colors.lighterText,
+                            }}>{item.name}</Text>
+                            <FlatList
+                                data={item.tags}
+                                keyExtractor={(tag, index) => index.toString()}
+                                horizontal
+                                style={{ width: 200 }}
+                                renderItem={({ item: tag }) => (
+                                    <Text style={{
+                                        fontSize: 12,
+                                        backgroundColor: tagColors[tag[1]].color,
+                                        color: '#fff',
+                                        borderRadius: 5,
+                                        padding: 3,
+                                        margin: 2
+                                    }}>{tagColors[tag[1]].label}</Text>
+                                )}
                             />
-                            <View>
-                                <Text style={{
-                                    fontSize: 20,
-                                    marginBottom: 0,
-                                    fontWeight: '900',
-                                    color: theme.colors.lighterText,
-                                }}>{item.name}</Text>
-                                <FlatList
-                                    data={item.tags}
-                                    keyExtractor={(tag, index) => index.toString()}
-                                    horizontal
-                                    style={{ width: 200 }}
-                                    renderItem={({ item }) => (
-                                        <Text style={{
-                                            fontSize: 12,
-                                            backgroundColor: tagColors[item[1]].color,
-                                            color: '#fff',
-                                            borderRadius: 5,
-                                            padding: 3,
-                                            margin: 2
-                                        }}>{tagColors[item[1]].label}</Text>
-                                    )}
-                                />
-                                <Text style={{color: theme.colors.textColor}}>{t('home.viewOnMap')}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                })}
+                            <Text style={{color: theme.colors.textColor}}>{t('home.viewOnMap')}</Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
             </View>
             <BottomSheetParkDetails
                 ref={bottomSheetRef}
