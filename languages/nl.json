@@ -1,0 +1,27 @@
+{
+  "language": "Dutch",
+  "home": {
+    "suggestedParks": "Aanbevolen parken",
+    "favoriteParks": "Favoriete Parken",
+    "picturePrompt": "Neem foto",
+    "deletePicture": "Verwijder foto",
+    "viewOnMap": "Klik hier om op de kaart weer te geven"
+  },
+  "settings": {
+    "theme": "Wissel van thema",
+    "language": "Wissel taal"
+  },
+  "global": {
+    "tags": {
+      "social": "Sociaal",
+      "nonsocial": "Niet sociaal",
+      "bigDogs": "Grote honden",
+      "smallDogs": "Kleine honden",
+      "gated": "Afgezet",
+      "open": "Niet afgezet"
+    },
+    "favorites": "favorieten",
+    "map": "kaart",
+    "settings": "instellingen"
+  }
+}

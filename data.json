@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "Jasonpark",
+    "longitude": "4.486313841020624",
+    "latitude": "51.96214648830656",
+    "url": "https://pvla.nl/wp-content/uploads/freshizer/3e4c58db98c8cdea3a15d162c7468578_ganzen-copy-1920-800-c-90.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Argonautenpark",
+    "longitude": "4.488749609333631",
+    "latitude": "51.959501007274945",
+    "url": "https://rotta-natuur.nl/wp-content/uploads/2020/05/Argonautenpark.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Niet Sociaal",
+        1
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Plaswijckpark",
+    "longitude": "4.482288118383457",
+    "latitude": "51.95602116607339",
+    "url": "https://www.opwegmetmama.nl/wp-content/uploads/2019/04/20190331_113401-e1554143010381-1.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Kralingse Bos",
+    "longitude": "4.520904986612416",
+    "latitude": "51.941185900012805",
+    "url": "https://www.cityrotterdam.com/wp-content/uploads/2022/01/Kralingseplas-Rotterdam-1.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Museumpark",
+    "longitude": "4.4733996",
+    "latitude": "51.9113962",
+    "url": "https://418-feedfactory.imgix.net/628657d239a35f00de8f05e4/Rotterdam-Skyline_166_Robin-Utrecht-scaled.jpg?fit=max&auto=format",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Lage bergse bos",
+    "longitude": "4.516055375528989",
+    "latitude": "51.9652588306819",
+    "url": "https://www.hosper.nl/wp-content/uploads/2000/11/HOSPER_Lansingerland-Lage-Bergse-Bos-1.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Niet Sociaal",
+        1
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ],
+      [
+        "Afgezet",
+        4
+      ]
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Het Park",
+    "longitude": "4.469268",
+    "latitude": "51.905888",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Het_Park%2C_Rotterdam_%28DSC_0442%29.jpg/1200px-Het_Park%2C_Rotterdam_%28DSC_0442%29.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Ons park",
+    "longitude": "4.497275541341692",
+    "latitude": "51.91492057428443",
+    "url": "https://pvla.nl/wp-content/uploads/freshizer/3e4c58db98c8cdea3a15d162c7468578_ganzen-copy-1920-800-c-90.jpg",
+    "description": "Rotterdam",
+    "tags": [
+      [
+        "Sociaal",
+        0
+      ],
+      [
+        "Grote Honden",
+        2
+      ],
+      [
+        "Kleine Honden",
+        3
+      ]
+    ]
+  }
+]

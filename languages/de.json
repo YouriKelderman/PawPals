@@ -1,0 +1,27 @@
+{
+  "language": "German",
+  "home": {
+    "suggestedParks": "Empfohlene Parks",
+    "favoriteParks": "Lieblingsparks",
+    "picturePrompt": "Foto machen",
+    "deletePicture": "Foto löschen",
+    "viewOnMap": "Klicken Sie hier, um auf der Karte anzuzeigen"
+  },
+  "settings": {
+    "theme": "Thema wechseln",
+    "language": "Sprache wechseln"
+  },
+  "global": {
+    "tags": {
+      "social": "Sozial",
+      "nonsocial": "Nicht sozial",
+      "bigDogs": "Große Hunde",
+      "smallDogs": "Kleine Hunde",
+      "gated": "Abgesperrt",
+      "open": "Nicht abgesperrt"
+    },
+    "favorites": "favoriten",
+    "map": "karte",
+    "settings": "einstellungen"
+  }
+}

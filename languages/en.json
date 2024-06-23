@@ -1,0 +1,27 @@
+{
+  "language": "English",
+  "home": {
+    "suggestedParks": "Recommended parks",
+    "favoriteParks": "Favorite parks",
+    "picturePrompt": "Take picture",
+    "deletePicture": "Delete picture",
+    "viewOnMap": "Click here to view item on map"
+  },
+  "settings": {
+    "theme": "Switch theme",
+    "language": "Switch language"
+  },
+  "global": {
+    "tags": {
+      "social": "Social",
+      "nonsocial": "Not social",
+      "bigDogs": "Large dogs",
+      "smallDogs": "Small dogs",
+      "gated": "Gated",
+      "open": "Not gated"
+    },
+    "favorites": "favorites",
+    "map": "map",
+    "settings": "settings"
+  }
+}
